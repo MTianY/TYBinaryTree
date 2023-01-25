@@ -1,6 +1,8 @@
 package com.ty;
 
 import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class BinarySearchTree<E> {
 
@@ -101,6 +103,103 @@ public class BinarySearchTree<E> {
 
     public boolean contains(E element) {
         return false;
+    }
+
+    // 前序遍历: 根->左->右
+    public void preorderTraversal() {
+        // 传入根节点
+        preorderTraversal(root);
+    }
+
+    private void preorderTraversal(Node<E> node) {
+
+        // 当传入节点为空时, 结束递归
+        if (node == null) return;
+
+        // 先访问节点
+        System.out.print("前序: " + node.element + ";");
+        // 再传入左子树
+        preorderTraversal(node.left);
+        // 再传入右子树
+        preorderTraversal(node.right);
+    }
+
+    // 中序遍历: 左->根->右 或者 右->根->左
+    // 如果时二叉搜索树, 则有升序或者降序
+    public void inorderTraversal() {
+        // 传入根节点
+        inorderTraversal(root);
+    }
+
+    private void inorderTraversal(Node<E> node) {
+
+        if (node == null) return;
+
+        // 二叉搜索树升序
+        inorderTraversal(node.left);
+        System.out.print("中序:" + node.element);
+        inorderTraversal(node.right);
+
+        // 二叉搜索树降序
+//        inorderTraversal(node.right);
+//        System.out.print("中序:" + node.element);
+//        inorderTraversal(node.left);
+
+    }
+
+    // 后序遍历: 左->右->根
+    public void postorderTraversal() {
+        postorderTraversal(root);
+    }
+
+    private void postorderTraversal(Node<E> node) {
+
+        if (node == null) return;
+
+        postorderTraversal(node.left);
+        postorderTraversal(node.right);
+        System.out.print("后序:" + node.element);
+    }
+
+    // 层序遍历: 从上到下, 从左到右
+
+    /**
+     *              7
+     *         4          9
+     *      2    5     8    11
+     *    1  3          10    12
+     */
+
+    /**
+     * 层序遍历思路:
+     * 1. 创建一个队列
+     * 2. 先将根节点入队
+     * 3. 将头节点出队, 访问
+     * 4. 如果此根节点有左子树, 则入队, 如果有右子树,则入队
+     */
+
+    public void levelorderTraversal() {
+        if (root == null) return;
+        // 队列
+        Queue<Node<E>> queue = new LinkedList<>();
+        // 将根节点入队
+        queue.offer(root);
+        // 如果队列不为空
+        while (!queue.isEmpty()) {
+            // 取出根节点
+            Node<E> node = queue.poll();
+            // 访问
+            System.out.print("层序:" + node.element + "; ");
+            // 看其是否有左右子树
+            if (node.left != null) {
+                // 有左子树, 则入队
+                queue.offer(node.left);
+            }
+            if (node.right != null) {
+                // 有右子树, 则入队
+                queue.offer(node.right);
+            }
+        }
     }
 
     /**
