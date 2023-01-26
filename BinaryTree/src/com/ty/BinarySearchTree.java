@@ -204,6 +204,53 @@ public class BinarySearchTree<E> {
         }
     }
 
+    // 求二叉树高度
+    public int height() {
+        // 递归方法
+//        return height(root);
+
+        // 迭代
+        return height2();
+    }
+
+    private int height(Node<E> node) {
+        // 递归终止条件: 当传入节点为空的时候
+        if (node == null) return 0;
+        // 求当前节点的高度, 递归方法,当前节点高度等于其左子树或者右子树的最大高度加 1
+        return 1 + Math.max(height(node.left), height(node.right));
+    }
+
+    // 迭代方法求高度: 使用层序遍历
+    private int height2() {
+        if (root == null) return 0;
+
+        int height = 0;
+        int level = 1;  // 层数
+        Queue<Node<E>> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            Node<E> node = queue.poll();
+            // 出队之后, level 层数减 1
+            level--;
+
+            if (node.left != null) {
+                queue.offer(node.left);
+            }
+            if (node.right != null) {
+                queue.offer(node.right);
+            }
+
+            // 当 level==0 时, 表示当前层已全部出队, 那么此时队列长度就是下一层的长度
+            if (level == 0) {
+                level = queue.size();
+                // 递增高度
+                height++;
+            }
+
+        }
+        return height;
+    }
+
     /**
      * @param e1 元素 1
      * @param e2 元素 2

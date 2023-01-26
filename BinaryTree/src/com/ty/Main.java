@@ -14,9 +14,9 @@ public class Main {
 //            bst1.add(data[i]);
 //        }
 
-        preorderTraversal();
-        inorderTraversal();
-        postorderTraversal();
+//        preorderTraversal();
+//        inorderTraversal();
+//        postorderTraversal();
         levelorderTraversal();
 
     }
@@ -36,7 +36,7 @@ public class Main {
                 return element == 2 ? true : false;
             }
         });
-        System.out.println();
+        System.out.println("前序遍历二叉树高度:" + bst.height());
     }
 
     static void inorderTraversal() {
@@ -91,6 +91,7 @@ public class Main {
             }
         });
         System.out.println();
+        System.out.println("二叉树高度:" + bst.height());
     }
 
 }
