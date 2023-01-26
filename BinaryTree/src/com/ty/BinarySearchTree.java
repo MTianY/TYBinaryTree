@@ -257,7 +257,7 @@ public class BinarySearchTree<E> {
      * 1. 度为 1 的节点,只有左子树
      * 2. 度为 1 的节点,只有0 个或者 1 个
      */
-    public boolean isComplete() {
+    public boolean isComplete2() {
 
         if (root == null) return false;
 
@@ -288,6 +288,41 @@ public class BinarySearchTree<E> {
             }
         }
 
+        return true;
+    }
+
+    // 另一种判断完全二叉树写法
+    public boolean isComplete() {
+
+        // 先层序遍历,确保每个节点都可以遍历到
+        Queue<Node<E>> queue = new LinkedList<>();
+        queue.offer(root);
+
+        // 是否该节点后面节点都是叶子节点(当找到一个节点只有左子树时, 那么依照完全二叉树性质, 其后面节点应该都是叶子节点)
+        boolean isLeaf = false;
+
+        while (!queue.isEmpty()) {
+
+            Node<E> node = queue.poll();
+
+            // 如果检测到后面节点必须是叶子节点, 但是当前节点不是叶子节点, 那么就不是完全二叉树
+            if (isLeaf && !node.isLeaf()) return false;
+
+            if (node.left != null) {
+                queue.offer(node.left);
+            } else if (node.right != null) {
+                // 左子树为 null时, 右子树不为 null, 一定不是完全二叉树
+                return false;
+            }
+
+            if (node.right != null) {
+                queue.offer(node.right);
+            } else {
+                // 右子树为空时, 左子树可能为空,可能不为空
+                // 那么依赖完全二叉树性质, 其后面要遍历的节点必须满足叶子节点才可以
+                isLeaf = true;
+            }
+        }
         return true;
     }
 
