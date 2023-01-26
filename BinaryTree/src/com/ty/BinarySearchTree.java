@@ -326,6 +326,50 @@ public class BinarySearchTree<E> {
         return true;
     }
 
+    // 前驱节点: [中序遍历]时当前节点的前一个节点
+    private Node<E> predecessor(Node<E> node) {
+        if (node == null) return node;
+
+        // 假设前驱节点是其左子节点
+        Node<E> p = node.left;
+        // 1. 先找其左子树情况, 如果左子节点不为空, 遍历找其右子节点, 其右子节点中最右边的一个,就是其前驱节点
+        if (p != null) {
+            // 当右子节点为空的情况下, 结束循环, 说明已找到前驱节点
+            while (p.right != null) {
+                p = p.right;
+            }
+            return p;
+        }
+
+        // 2. 来到这说明左子树为空, 那么从其父节点,祖父节点中找前驱节点
+        // 如果一直是其父节点的左子树, 那么找到最上层的父节点终止, 其再父节点则为其前驱节点
+        while (node.parent != null && node == node.parent.left) {
+            node = node.parent;
+        }
+        // 第一种情况是 node.parent == null, 那么其前驱节点也是空, 返回 node.parent
+        // 第二种情况是 node == node.parent.left, 父节点左子树找到头了, 那么也是返回 node.parent
+        return node.parent;
+    }
+
+    // 后继节点: [中序遍历]时,当前节点的后一个节点
+    // 和找前驱相反
+    private Node<E> successor(Node<E> node) {
+        if (node == null) return node;
+        Node<E> s = node.right;
+        if (s != null) {
+            while (s.left != null) {
+                s = s.left;
+            }
+            return s;
+        }
+
+        while (node.parent != null && node == node.parent.right) {
+            node = node.parent;
+        }
+        return node.parent;
+    }
+
+
     /**
      * @param e1 元素 1
      * @param e2 元素 2
