@@ -14,9 +14,9 @@ public class Main {
 //            bst1.add(data[i]);
 //        }
 
-//        preorderTraversal();
-//        inorderTraversal();
-//        postorderTraversal();
+        preorderTraversal();
+        inorderTraversal();
+        postorderTraversal();
         levelorderTraversal();
 
     }
@@ -29,7 +29,14 @@ public class Main {
         for (int i = 0; i < data.length; i++) {
             bst.add(data[i]);
         }
-        bst.preorderTraversal();
+        bst.preorderTraversal(new BinarySearchTree.Visitor<Integer>() {
+            @Override
+            boolean visit(Integer element) {
+                System.out.print("[前序]" + element + " ");
+                return element == 2 ? true : false;
+            }
+        });
+        System.out.println();
     }
 
     static void inorderTraversal() {
@@ -40,7 +47,14 @@ public class Main {
         for (int i = 0; i < data.length; i++) {
             bst.add(data[i]);
         }
-        bst.inorderTraversal();
+        bst.inorderTraversal(new BinarySearchTree.Visitor<Integer>() {
+            @Override
+            boolean visit(Integer element) {
+                System.out.print("[中序]" + element + " ");
+                return element == 3 ? true : false;
+            }
+        });
+        System.out.println();
     }
 
     static void postorderTraversal() {
@@ -51,7 +65,14 @@ public class Main {
         for (int i = 0; i < data.length; i++) {
             bst.add(data[i]);
         }
-        bst.postorderTraversal();
+        bst.postorderTraversal(new BinarySearchTree.Visitor<Integer>() {
+            @Override
+            boolean visit(Integer element) {
+                System.out.print("[后序]" + element + " ");
+                return element == 2 ? true : false;
+            }
+        });
+        System.out.println();
     }
 
     static void levelorderTraversal() {
@@ -62,7 +83,14 @@ public class Main {
         for (int i = 0; i < data.length; i++) {
             bst.add(data[i]);
         }
-        bst.levelorderTraversal();
+        bst.levelorderTraversal(new BinarySearchTree.Visitor<Integer>() {
+            @Override
+            boolean visit(Integer element) {
+                System.out.print("[层序]" + element + " ");
+                return element == 12 ? true : false;
+            }
+        });
+        System.out.println();
     }
 
 }

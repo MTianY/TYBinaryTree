@@ -44,7 +44,7 @@ public class BinarySearchTree<E> {
         if (root == null) {
             root = new Node<>(element, null);
             size++;
-            System.out.print("根节点" + root.element + "\n");
+//            System.out.println("[根]" +element);
             return;
         }
 
@@ -57,39 +57,34 @@ public class BinarySearchTree<E> {
         while (node != null) {
             // 传入节点和 node 节点做比较
             cmp = compare(element, node.element);
-            System.out.print(">>>>> 循环开始" + "\n");
-            System.out.print("比较大小:"+"传入 element=" + element + " 当前 node.element=" + node.element + " cmp=" + cmp + "\n");
             // 存父节点
             parent = node;
             if (cmp > 0) {
                 node = node.right;
-                System.out.print("右" + "\n");
+//                System.out.println("[遍历-右]");
             } else if (cmp < 0) {
                 node = node.left;
-                System.out.print("左" + "\n");
+//                System.out.println("[遍历-左]");
             } else {
                 // 相等情况, 先覆盖处理
-                System.out.print("相等" + "\n");
+//                System.out.print("[遍历-相等]");
                 node.element = element;
                 return;
             }
-            System.out.print("node=" + node + "\n");
         }
 
-        System.out.print(">>>>> 循环结束" + "\n");
-
-        System.out.print("找到的父节点" + parent.element + "\n");
+//        System.out.println("找到的父节点" + parent.element);
         // 创建要添加的新节点
         Node<E> newNode = new Node<>(element, parent);
         // 根据方向插入
         if (cmp > 0) {
             // 添加到右子树
             parent.right = newNode;
-            System.out.print("新节点, 右子树" + newNode.element + "\n");
+//            System.out.println("[新-右子]" + newNode.element);
         } else {
             // 添加到左子树
             parent.left = newNode;
-            System.out.print("新节点, 左子树" + newNode.element + "\n");
+//            System.out.println("[新-左子]" + newNode.element);
         }
 
         // size 递增
@@ -106,39 +101,43 @@ public class BinarySearchTree<E> {
     }
 
     // 前序遍历: 根->左->右
-    public void preorderTraversal() {
+    public void preorderTraversal(Visitor<E> visitor) {
+        if (visitor == null) return;
         // 传入根节点
-        preorderTraversal(root);
+        preorderTraversal(root, visitor);
     }
 
-    private void preorderTraversal(Node<E> node) {
+    private void preorderTraversal(Node<E> node, Visitor<E> visitor) {
 
         // 当传入节点为空时, 结束递归
-        if (node == null) return;
+        if (node == null || visitor.stop) return;
 
         // 先访问节点
-        System.out.print("前序: " + node.element + ";");
+        // 将访问节点传到外部自己调用
+        visitor.stop = visitor.visit(node.element);
         // 再传入左子树
-        preorderTraversal(node.left);
+        preorderTraversal(node.left, visitor);
         // 再传入右子树
-        preorderTraversal(node.right);
+        preorderTraversal(node.right,visitor);
     }
 
     // 中序遍历: 左->根->右 或者 右->根->左
     // 如果时二叉搜索树, 则有升序或者降序
-    public void inorderTraversal() {
+    public void inorderTraversal(Visitor<E> visitor) {
+        if (visitor == null) return;
         // 传入根节点
-        inorderTraversal(root);
+        inorderTraversal(root, visitor);
     }
 
-    private void inorderTraversal(Node<E> node) {
+    private void inorderTraversal(Node<E> node, Visitor<E> visitor) {
 
-        if (node == null) return;
+        if (node == null || visitor.stop) return;
 
         // 二叉搜索树升序
-        inorderTraversal(node.left);
-        System.out.print("中序:" + node.element);
-        inorderTraversal(node.right);
+        inorderTraversal(node.left, visitor);
+        if (visitor.stop) return;
+        visitor.stop = visitor.visit(node.element);
+        inorderTraversal(node.right, visitor);
 
         // 二叉搜索树降序
 //        inorderTraversal(node.right);
@@ -148,17 +147,19 @@ public class BinarySearchTree<E> {
     }
 
     // 后序遍历: 左->右->根
-    public void postorderTraversal() {
-        postorderTraversal(root);
+    public void postorderTraversal(Visitor<E> visitor) {
+        if (visitor == null) return;
+        postorderTraversal(root, visitor);
     }
 
-    private void postorderTraversal(Node<E> node) {
+    private void postorderTraversal(Node<E> node, Visitor<E> visitor) {
 
-        if (node == null) return;
+        if (node == null || visitor.stop) return;
 
-        postorderTraversal(node.left);
-        postorderTraversal(node.right);
-        System.out.print("后序:" + node.element);
+        postorderTraversal(node.left, visitor);
+        postorderTraversal(node.right, visitor);
+        if (visitor.stop) return;
+        visitor.stop = visitor.visit(node.element);
     }
 
     // 层序遍历: 从上到下, 从左到右
@@ -178,8 +179,8 @@ public class BinarySearchTree<E> {
      * 4. 如果此根节点有左子树, 则入队, 如果有右子树,则入队
      */
 
-    public void levelorderTraversal() {
-        if (root == null) return;
+    public void levelorderTraversal(Visitor<E> visitor) {
+        if (root == null || visitor == null) return;
         // 队列
         Queue<Node<E>> queue = new LinkedList<>();
         // 将根节点入队
@@ -189,7 +190,8 @@ public class BinarySearchTree<E> {
             // 取出根节点
             Node<E> node = queue.poll();
             // 访问
-            System.out.print("层序:" + node.element + "; ");
+            if (visitor.stop) return;
+            visitor.stop = visitor.visit(node.element);
             // 看其是否有左右子树
             if (node.left != null) {
                 // 有左子树, 则入队
@@ -219,6 +221,17 @@ public class BinarySearchTree<E> {
         if (element == null) {
             throw new IllegalArgumentException("element 不能为空!");
         }
+    }
+
+    // 抽象类, 定义好方法, 继承他的类必须实现这个方法, 类似接口
+    public static abstract class Visitor<E> {
+        boolean stop;
+
+        /**
+         * @param element 元素
+         * @return 返回 true, 表示停止遍历
+         */
+        abstract boolean visit(E element);
     }
 
     private static class Node<E> {
