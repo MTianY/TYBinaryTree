@@ -77,7 +77,7 @@ public class Main {
 
     static void levelorderTraversal() {
         Integer data[] = new Integer[] {
-                7,4,9,2,1,3,5,8,11,10,12
+                7,4,9,2,5
         };
         BinarySearchTree<Integer> bst = new BinarySearchTree<>();
         for (int i = 0; i < data.length; i++) {
@@ -87,11 +87,12 @@ public class Main {
             @Override
             boolean visit(Integer element) {
                 System.out.print("[层序]" + element + " ");
-                return element == 12 ? true : false;
+                return element == 5 ? true : false;
             }
         });
         System.out.println();
         System.out.println("二叉树高度:" + bst.height());
+        System.out.println("是否是完全二叉树:" + bst.isComplete());
     }
 
 }

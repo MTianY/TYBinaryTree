@@ -252,6 +252,43 @@ public class BinarySearchTree<E> {
     }
 
     /**
+     * 判断二叉树是否是完全二叉树 (使用层序遍历, 遍历每个节点, 看其左右子树做判断)
+     * 完全二叉树条件:
+     * 1. 度为 1 的节点,只有左子树
+     * 2. 度为 1 的节点,只有0 个或者 1 个
+     */
+    public boolean isComplete() {
+
+        if (root == null) return false;
+
+        Queue<Node<E>> queue = new LinkedList<>();
+        queue.offer(root);
+
+        // 是否是叶子节点
+        boolean isLeaf = false;
+
+        while (!queue.isEmpty()) {
+            Node<E> node = queue.poll();
+
+            // 如果不是叶子节点, 则不是完全二叉树
+            if (isLeaf && !node.isLeaf()) return false;
+
+            // 如果有 2 个子节点, 才满足完全二叉树条件, 则入队
+            if (node.hasTwoChildren()) {
+                queue.offer(node.left);
+                queue.offer(node.right);
+            } else if (node.left == null && node.right != null) {
+                return false;
+            } else {
+                // 除了上面两种条件外, 到这里之后,必须是叶子节点,才满足完全二叉树条件
+                isLeaf = true;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * @param e1 元素 1
      * @param e2 元素 2
      * @return 比较两个元素, 返回值为0, 代表e1和e2相等, 返回值大于0,e1 大于 e2, 返回值小于 0, 则 e1 小于 e2
@@ -289,6 +326,16 @@ public class BinarySearchTree<E> {
         public Node(E element, Node<E> parent) {
             this.element = element;
             this.parent = parent;
+        }
+
+        // 是否是叶子节点
+        public boolean isLeaf() {
+            return left == null && right == null;
+        }
+
+        // 是否有 2 个节点
+        public boolean hasTwoChildren() {
+            return left != null && right != null;
         }
     }
 }
