@@ -282,6 +282,9 @@ public class BinarySearchTree<E> {
             } else {
                 // 除了上面两种条件外, 到这里之后,必须是叶子节点,才满足完全二叉树条件
                 isLeaf = true;
+                if (node.left != null) {
+                    queue.offer(node.left);
+                }
             }
         }
 
