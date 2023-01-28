@@ -168,6 +168,10 @@ public class BinaryTree<E> {
         return node.parent;
     }
 
+    protected Node<E> createNode (E element, Node<E> parent) {
+        return new Node<>(element, parent);
+    }
+
     protected static class Node<E> {
         E element;
         Node<E> left;
@@ -187,6 +191,17 @@ public class BinaryTree<E> {
         public boolean hasTwoChildren() {
             return left != null && right != null;
         }
+
+        // 自己是左子树
+        public boolean isLeftChild() {
+            return parent != null && this == parent.left;
+        }
+
+        // 自己是右子树
+        public boolean isRightChild() {
+            return parent != null && this == parent.right;
+        }
+
     }
 
     // 抽象类, 定义好方法, 继承他的类必须实现这个方法, 类似接口

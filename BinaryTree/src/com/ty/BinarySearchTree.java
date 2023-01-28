@@ -29,9 +29,12 @@ public class BinarySearchTree<E> extends BinaryTree {
 
         // 根结点为空, 添加第一个节点.
         if (root == null) {
-            root = new Node<>(element, null);
+            root = createNode(element, null);
             size++;
 //            System.out.println("[根]" +element);
+
+            afterAdd(root);
+
             return;
         }
 
@@ -62,7 +65,7 @@ public class BinarySearchTree<E> extends BinaryTree {
 
 //        System.out.println("找到的父节点" + parent.element);
         // 创建要添加的新节点
-        Node<E> newNode = new Node<>(element, parent);
+        Node<E> newNode = createNode(element, parent);
         // 根据方向插入
         if (cmp > 0) {
             // 添加到右子树
@@ -76,6 +79,20 @@ public class BinarySearchTree<E> extends BinaryTree {
 
         // size 递增
         size++;
+
+        afterAdd(newNode);
+
+    }
+
+    /**
+     * 添加节点之后处理
+     * @param node 新添加的节点
+     */
+    protected void afterAdd(Node<E> node) {
+        // 二叉搜索树什么都不做
+    }
+
+    protected void afterRemove(Node<E> node) {
 
     }
 
@@ -129,9 +146,15 @@ public class BinarySearchTree<E> extends BinaryTree {
                 node.parent.right = replacement;
             }
 
+            // 删除节点之后的处理
+            afterRemove(node);
+
         } else if (node.parent == null) {
             // 叶子节点并且时根节点
             root = null;
+
+            // 删除节点之后的处理
+            afterRemove(node);
         } else {
             // 叶子节点
             if (node == node.parent.left) {
@@ -141,6 +164,9 @@ public class BinarySearchTree<E> extends BinaryTree {
                 // 反之清空左子树
                 node.parent.right = null;
             }
+
+            // 删除节点之后的处理
+            afterRemove(node);
         }
 
     }
