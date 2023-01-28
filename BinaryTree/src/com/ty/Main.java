@@ -93,6 +93,17 @@ public class Main {
         System.out.println();
         System.out.println("二叉树高度:" + bst.height());
         System.out.println("是否是完全二叉树:" + bst.isComplete());
+
+        bst.remove(9);
+        bst.remove(7);
+        bst.remove(5);
+        bst.levelorderTraversal(new BinarySearchTree.Visitor<Integer>() {
+            @Override
+            boolean visit(Integer element) {
+                System.out.print("[删除后遍历:层序]" + element + " ");
+                return element == 5 ? true : false;
+            }
+        });
     }
 
 }

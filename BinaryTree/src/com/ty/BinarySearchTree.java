@@ -27,7 +27,8 @@ public class BinarySearchTree<E> {
     }
 
     public void clear() {
-
+        root = null;
+        size = 0;
     }
 
     /**
@@ -92,12 +93,97 @@ public class BinarySearchTree<E> {
 
     }
 
+    /**
+     * 删除节点
+     * 1. 删除叶子节点, 度为 0
+     * 2. 删除度为 1 的
+     * 3. 删除度为 2 的
+     */
+
+
     public void remove(E element) {
+        remove(node(element));
+    }
+
+    private void remove(Node<E> node) {
+
+        if (node == null) return;
+
+        size--;
+
+        // 节点度为 2 的情况, 找前驱或者后继几点替代
+        if (node.hasTwoChildren()) {
+            // 找后继节点
+            Node<E> s = successor(node);
+            // 后继节点的值覆盖当前节点
+            node.element = s.element;
+            // 节点指向后继节点, 后面删除节点时, 就会把后继节点同时删除
+            node = s;
+        }
+
+        // 删除节点 node (度为 1 或者 0)
+        // 如果度为 1, 那么 node.left == null 就剩右子树,反之左子树
+        // 如果度为 0. 那么左右子树均为空
+        Node<E> replacement = node.left != null ? node.left : node.right;
+
+        if (replacement != null) {
+            // 度为 1
+            // 更改 parent
+            replacement.parent = node.parent;
+            // 更改 parent 的 left或者 right 的指向
+
+            if (node.parent == null) {
+                // 叶子节点并且时根结点的情况, 将 root 指向被替代节点即可
+                root = replacement;
+            } else if (node == node.parent.left) {
+                // 在左边
+                node.parent.left = replacement;
+            } else {
+                // 在右边
+                node.parent.right = replacement;
+            }
+
+        } else if (node.parent == null) {
+            // 叶子节点并且时根节点
+            root = null;
+        } else {
+            // 叶子节点
+            if (node == node.parent.left) {
+                // 清空右子树
+                node.parent.left = null;
+            } else {
+                // 反之清空左子树
+                node.parent.right = null;
+            }
+        }
 
     }
 
+    // 根据传入元素, 找到对应节点
+    private Node<E> node(E element) {
+        Node<E> node = root;
+        while (node != null) {
+            int cmp = compare(element, node.element);
+            // 二者相等
+            if (cmp == 0) return node;
+            if (cmp > 0) {
+                // 在右子树
+                node = node.right;
+            } else {
+                // 在左子树
+                node = node.left;
+            }
+        }
+        // 退出循环, node==null
+        return null;
+    }
+
+    /**
+     * @param element 传入元素
+     * @return true 节点存在
+     */
     public boolean contains(E element) {
-        return false;
+        return node(element) != null;
     }
 
     // 前序遍历: 根->左->右
