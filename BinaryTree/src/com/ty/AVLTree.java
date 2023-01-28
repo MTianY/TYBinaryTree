@@ -298,7 +298,7 @@ public class AVLTree<E> extends BinarySearchTree {
      * 平均时间复杂度
      * 搜素 : O(logn)
      * 添加 : O(logn)
-     * 删除 : O(logn), 最左需要 O(logn) 次的旋转操作
+     * 删除 : O(logn), 最多需要 O(logn) 次的旋转操作
      */
 
     @Override
