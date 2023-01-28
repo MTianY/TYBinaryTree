@@ -14,9 +14,9 @@ public class Main {
 //            bst1.add(data[i]);
 //        }
 
-//        preorderTraversal();
-//        inorderTraversal();
-//        postorderTraversal();
+        preorderTraversal();
+        inorderTraversal();
+        postorderTraversal();
         levelorderTraversal();
 
     }
