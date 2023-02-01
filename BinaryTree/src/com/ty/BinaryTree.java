@@ -202,6 +202,17 @@ public class BinaryTree<E> {
             return parent != null && this == parent.right;
         }
 
+        // 兄弟节点
+        public Node<E> sibling() {
+            if (isLeftChild()) {
+                return parent.right;
+            }
+            if (isRightChild()) {
+                return parent.left;
+            }
+            return null;
+        }
+
     }
 
     // 抽象类, 定义好方法, 继承他的类必须实现这个方法, 类似接口

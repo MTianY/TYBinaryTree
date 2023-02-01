@@ -92,7 +92,7 @@ public class BinarySearchTree<E> extends BinaryTree {
         // 二叉搜索树什么都不做
     }
 
-    protected void afterRemove(Node<E> node) {
+    protected void afterRemove(Node<E> node, Node<E> replacement) {
 
     }
 
@@ -147,14 +147,14 @@ public class BinarySearchTree<E> extends BinaryTree {
             }
 
             // 删除节点之后的处理
-            afterRemove(node);
+            afterRemove(node, replacement);
 
         } else if (node.parent == null) {
             // 叶子节点并且时根节点
             root = null;
 
             // 删除节点之后的处理
-            afterRemove(node);
+            afterRemove(node, null);
         } else {
             // 叶子节点
             if (node == node.parent.left) {
@@ -166,7 +166,7 @@ public class BinarySearchTree<E> extends BinaryTree {
             }
 
             // 删除节点之后的处理
-            afterRemove(node);
+            afterRemove(node, null);
         }
 
     }
